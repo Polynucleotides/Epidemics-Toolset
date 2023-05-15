@@ -1,0 +1,53 @@
+import anvil.email
+import anvil.tables as tables
+import anvil.tables.query as q
+from anvil.tables import app_tables
+
+import anvil.server
+import anvil.mpl_util
+
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+
+@anvil.server.callable
+def plotdata(R0,t_infective, i_initial, r_initial):
+    # parameter values
+    
+    s_initial = 1 - i_initial - r_initial
+    
+    gamma = 1/t_infective
+    beta = R0*gamma
+    
+    def deriv(x, t, beta, gamma):
+        s, i, r = x
+        dsdt = -beta * s * i
+        didt = beta * s * i - gamma * i
+        drdt =  gamma * i
+        return [dsdt, didt, drdt]
+    
+    t = np.linspace(0, 180, 2000)
+    x_initial = s_initial, i_initial, r_initial
+    soln = odeint(deriv, x_initial, t, args=(beta, gamma))
+    s, i, r = soln.T
+    
+    
+    # plot the data
+    fig = plt.figure(figsize=(12,6))
+    ax = [fig.add_subplot(221, axisbelow=True)]
+
+    ax[0].plot(t, s, lw=3, label='Susceptible')
+    ax[0].plot(t, i, lw=3, label='Infective')
+    ax[0].plot(t, r, lw=3, label='Recovered')
+    ax[0].set_title('Susceptible and Recovered Populations')
+    ax[0].set_xlabel('Time /days')
+    ax[0].set_ylabel('Fraction')
+
+    for a in ax: 
+        a.grid(True)
+        a.legend()
+
+    plt.tight_layout()
+    return anvil.mpl_util.plot_image()
+
