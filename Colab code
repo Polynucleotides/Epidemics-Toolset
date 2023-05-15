@@ -1,0 +1,127 @@
+#@title #Libraries
+!pip install Biopython
+from Bio import SeqIO
+import numpy as np
+import pandas as pd
+from collections import Counter
+import os
+import gdown
+!pip install anvil-uplink
+import anvil.server
+anvil.server.connect("server_YKO6XYP3RPGYLOPURZIRB3SV-R6BWS4Q7PPX4DGGY")
+
+#@title #Upload your fasta file
+#creating and using your new fasta in the uncommented section
+input_file = "SARS_CoV_2_vs_RTG13.fasta"
+fasta_location = ("https://drive.google.com/uc?id=169OF1aOqBIyW2XjNlKQMTS2CKUOA_aJx")
+
+if not os.path.exists(input_file):
+    gdown.download(fasta_location, input_file) 
+
+#input_file = "SARS_CoV_2_vs_RTG13.fasta"
+#fasta_location = ("https://drive.google.com/uc?id=169OF1aOqBIyW2XjNlKQMTS2CKUOA_aJx")
+
+#if not os.path.exists(input_file):
+#    gdown.download(fasta_location, input_file) 
+
+#@title #Parsing
+sequences = [record for record in 
+             SeqIO.parse(input_file,'fasta')]
+sequence_known = np.array(sequences[0])
+sequence_unknown = np.array(sequences[1])
+
+
+#@title #MyFunction: Edit this!
+@anvil.server.callable
+def MyFunction():
+  return 1
+  
+  
+  
+  #@title #Function: Similarity percentage
+@anvil.server.callable
+def percentage1():
+  sequence_known = np.array(sequences[0]) 
+  sequence_unknown = np.array(sequences[1])
+
+  # Compute length, number of different bases, 
+  # and number of the same bases.
+  length_unknown = sum(sequence_unknown!='-')
+  bases_different = sum(sequence_known!=sequence_unknown)
+  bases_same = sum(sequence_known==sequence_unknown)
+  return 100*bases_same/length_unknown
+  
+  
+  #@title #Function: Unknown virus length
+@anvil.server.callable
+def unknlen1():
+  length_unknown = sum(sequence_unknown!='-')
+  return length_unknown
+  
+  
+  #@title #Function: Different bases
+@anvil.server.callable
+def basedif1():
+  sequence_known = np.array(sequences[0]) 
+  sequence_unknown = np.array(sequences[1])
+  bases_different = sum(sequence_known!=sequence_unknown)
+  return bases_different
+
+
+#@title #Function: ATCG
+@anvil.server.callable
+def ATCG11():
+    sequence_known = np.array(sequences[0]) 
+    sequence_unknown = np.array(sequences[0])
+    length_unknown = sum(sequence_unknown!='-')
+    A = sum(sequence_unknown=='A')
+    return 100*A/length_unknown
+
+@anvil.server.callable
+def ATCG21():
+    sequence_known = np.array(sequences[0]) 
+    sequence_unknown = np.array(sequences[0])
+    length_unknown = sum(sequence_unknown!='-')
+    T = sum(sequence_unknown=='T')
+    return 100*T/length_unknown
+
+@anvil.server.callable
+def ATCG31():
+    sequence_known = np.array(sequences[0]) 
+    sequence_unknown = np.array(sequences[0])
+    length_unknown = sum(sequence_unknown!='-')
+    C = sum(sequence_unknown=='C')
+    return 100*C/length_unknown
+
+@anvil.server.callable
+def ATCG41():
+    sequence_known = np.array(sequences[0]) 
+    sequence_unknown = np.array(sequences[0])
+    length_unknown = sum(sequence_unknown!='-')
+    G = sum(sequence_unknown=='G')
+    return 100*G/length_unknown
+
+
+#@title #Function: GC-content
+
+@anvil.server.callable
+def GC1():
+  sequence_known = np.array(sequences[0]) 
+  sequence_unknown = np.array(sequences[0])
+  A = sum(sequence_unknown=='A')
+  T = sum(sequence_unknown=='T')
+  C = sum(sequence_unknown=='C')
+  G = sum(sequence_unknown=='G')
+  return 100*(G+C)/(A+T+G+C)
+  
+  
+  
+  #@title #Function: Start-codons
+@anvil.server.callable
+def codons1():
+  start_codons = 0
+  for i in range(len(sequence_unknown[:-3])):
+    codon = ''.join(sequence_unknown[i:(i+3)])
+    if codon == 'ATG':
+      start_codons = start_codons + 1
+  return start_codons
