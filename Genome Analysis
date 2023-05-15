@@ -1,0 +1,82 @@
+from ._anvil_designer import Genome_analysisTemplate
+from anvil import *
+import anvil.server
+import plotly.graph_objects as go
+import anvil.server
+
+
+class Genome_analysis(Genome_analysisTemplate):
+  def __init__(self, **properties):
+    # Set Form properties and Data Bindings.
+    self.init_components(**properties)
+    self.label_6.font_size = 30
+    self.button_8.font_size = 20
+
+  def image_1_mouse_up(self, x, y, button, **event_args):
+    """This method is called when a mouse button is released on this component"""
+    pass
+
+  def button_2_click(self, **event_args):
+    unknown = anvil.server.call('unknlen1')
+    self.unknown_lenght.visible=True
+    self.unknown_lenght.text= str(unknown)
+
+  def button_3_click(self, **event_args):
+    bases = anvil.server.call('basedif1')
+    self.bases_differ.visible=True
+    self.bases_differ.text= str(bases)
+
+  def button_5_click(self, **event_args):
+    bases1 = anvil.server.call('ATCG11')
+    self.label_12.visible=True
+    self.label_12.text= str(bases1)
+
+    bases2 = anvil.server.call('ATCG21')
+    self.label_14.visible=True
+    self.label_14.text= str(bases2)
+
+    bases3 = anvil.server.call('ATCG31')
+    self.label_16.visible=True
+    self.label_16.text= str(bases3)
+
+    bases4 = anvil.server.call('ATCG41')
+    self.label_18.visible=True
+    self.label_18.text= str(bases4)
+
+  def button_4_click(self, **event_args):
+    GC = anvil.server.call('GC1')
+    self.label_25.visible=True
+    self.label_25.text= str(GC)
+
+  def button_6_click(self, **event_args):
+    codons = anvil.server.call('codons1')
+    self.label_27.visible=True
+    self.label_27.text= str(codons)
+
+
+  def button_10_click(self, **event_args):
+    function =anvil.server.call('MyFunction')
+    self.label_3.visible=True
+    self.label_3.text= str(function)
+
+  def button_9_click(self, **event_args):
+    self.content_panel.clear()
+    open_form('Mathematical_models')
+
+  def button_7_click(self, **event_args):
+    self.content_panel.clear()
+    open_form('Home')
+
+  def button_1_click(self, **event_args):
+    similarity = anvil.server.call('percentage1')
+    self.genomeper_label.visible=True
+    self.genomeper_label.text= str(similarity)
+
+
+
+
+
+
+
+
+
