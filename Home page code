@@ -1,0 +1,176 @@
+from ._anvil_designer import HomeTemplate
+from anvil import *
+import anvil.server
+import plotly.graph_objects as go
+import anvil.server
+#from Genome_analysisGenome_analysis import Genome_analysis
+
+class Home(HomeTemplate):
+  def __init__(self, **properties):
+    # Set Form properties and Data Bindings.
+    self.init_components(**properties)
+    self.label_6.font_size = 30
+    self.button_7.font_size = 20
+    
+
+    
+  def image_1_mouse_up(self, x, y, button, **event_args):
+      """This method is called when a mouse button is released on this component"""
+      pass
+  def SIR_button_copy_click(self, **event_args):
+     R0=1
+     try:
+      R0 = float(self.basic_reproduction.text)
+     except ValueError as ve:
+       self.basic_reproduction.text = 'Wrong value. Assigned value 1.'
+
+     t_infective = 1
+     try:  
+      t_infective= float(self.time_sum.text)
+     except ValueError as ve:
+       self.time_sum.text = 'Wrong value. Assigned value 1.'
+
+     i_initial=1
+     try:
+      i_initial= float(self.initial_infectedSIR.text)
+     except ValueError as ve:
+      self.initial_infectedSIR.text = 'Wrong value. Assigned value 1.'
+
+     r_initial = 1
+     try:
+      r_initial= float(self.initial_recoveredSIR.text)
+     except ValueError as ve:
+      self.initial_recoveredSIR.text = 'Wrong value. Assigned value 1.'
+    
+     media_obj = anvil.server.call('plotdata',R0,t_infective, i_initial, r_initial)
+     self.image_4.source = media_obj
+    #self.download_link.url = media_obj
+   
+
+  def button_1_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    similarity = anvil.server.call('percentage1')
+    self.genomeper_label.visible=True
+    self.genomeper_label.text= str(similarity)
+
+  def SIR_button_click(self, **event_args):
+
+    R0=1
+    try:
+     R0 = float(self.basic_reproductionSEIR.text)
+    except ValueError as ve:
+       self.basic_reproductionSEIR.text = 'Wrong value. Assigned value 1.'
+
+    #R0 = float(self.basic_reproductionSEIR.text)
+    u=1
+    try:
+     u=float (self.control_paramter.text)
+    except ValueError as ve:
+       self.control_paramter.text = 'Wrong value. Assigned value 1.'
+    t_incubation = 1
+    try:
+     t_incubation = float (self.time_incubation.text)
+    except ValueError as ve:
+       self.time_incubation.text = 'Wrong value. Assigned value 1.'
+
+    t_infective = 1
+
+    try:
+     t_infective = float (self.time_infectious.text)
+    except ValueError as ve:
+       self.time_infectious.text= 'Wrong value. Assigned value 1.'
+
+    e_initial =1
+    try:
+     e_initial = float(self.initial_exposedSEIR.text)
+    except ValueError as ve:
+       self.initial_exposedSEIR.text= 'Wrong value. Assigned value 1.'
+
+    i_initial  = 1
+    try:
+     i_initial  = float(self.initial_infectedSEIR.text)
+    except ValueError as ve:
+      self.initial_infectedSEIR.text= 'Wrong value. Assigned value 1.'
+
+    r_initial = 1
+    try:
+     r_initial = float (self.initial_recoveredSEIR.text)
+    except ValueError as ve:
+      self.initial_recoveredSEIR.text= 'Wrong value. Assigned value 1.'
+    media_obj = anvil.server.call('plotdata2',R0,u,t_incubation,t_infective,e_initial, i_initial, r_initial)
+    self.image_5.source = media_obj
+
+  def button_2_click(self, **event_args):
+   unknown = anvil.server.call('unknlen1')
+   self.unknown_lenght.visible=True
+   self.unknown_lenght.text= str(unknown)
+
+  def button_3_click(self, **event_args):
+   bases = anvil.server.call('basedif1')
+   self.bases_differ.visible=True
+   self.bases_differ.text= str(bases)
+
+  def button_5_click(self, **event_args):
+   bases1 = anvil.server.call('ATCG11')
+   self.label_12.visible=True
+   self.label_12.text= str(bases1)
+  
+   bases2 = anvil.server.call('ATCG21')
+   self.label_14.visible=True
+   self.label_14.text= str(bases2)
+  
+   bases3 = anvil.server.call('ATCG31')
+   self.label_16.visible=True
+   self.label_16.text= str(bases3)
+    
+   bases4 = anvil.server.call('ATCG41')
+   self.label_18.visible=True
+   self.label_18.text= str(bases4)
+
+  def button_4_click(self, **event_args):
+   GC = anvil.server.call('GC1')
+   self.label_25.visible=True
+   self.label_25.text= str(GC)
+
+  def button_6_click(self, **event_args):
+   codons = anvil.server.call('codons1')
+   self.label_27.visible=True
+   self.label_27.text= str(codons)
+
+
+
+  def button_8_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    
+    self.content_panel.clear()
+    #self. content_panel.add_component(Genome_analysis())
+    open_form('Genome_analysis')
+    
+    
+
+  def button_9_click(self, **event_args):
+    
+    self.content_panel.clear()
+    open_form('Mathematical_models')
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+ 
+
+
+
+
+
+
+
